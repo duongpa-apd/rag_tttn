@@ -19,14 +19,16 @@ from pdf2image import convert_from_path
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
-SOURCE_DOCUMENT = 'https://rupertstudies.weebly.com/uploads/9/5/8/4/9584887/basic.mathematics.for.economists_-_rosser.rootledge_2003_second.edition.pdf'
+SOURCE_DOCUMENT_WEB = 'https://rupertstudies.weebly.com/uploads/9/5/8/4/9584887/basic.mathematics.for.economists_-_rosser.rootledge_2003_second.edition.pdf'
+SOURCE_DOCUMENT_LOCAL = 'toan-cao-cap-1-le-dinh-thuy.compressed.pdf'
 COLLECTION_NAME = "doc_index"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 postgres_connection = os.getenv("POSTGRES_CONNECTION")
 
 def main():
     print("Extracting...")
-    pdf_text = extract_pdf_text(SOURCE_DOCUMENT)
+    # pdf_text = extract_pdf_text(SOURCE_DOCUMENT_WEB)
+    pdf_text = extract_pdf_text_from_image(SOURCE_DOCUMENT_LOCAL)
 
     print("Chunking...")
     chunks = pdf_chunk(pdf_text)
@@ -48,6 +50,15 @@ def extract_pdf_text(pdf_url: str) -> List[Document]:
     pdf_text = loader.load()
     print(f"Number of documents = {len(pdf_text)}")
 
+    return pdf_text
+
+def extract_pdf_text_from_image(pdf_path: str) -> List[Document]:
+    print("PDF file text is extracted...")
+    images = convert_from_path(pdf_path)
+    pdf_text = []
+    for image in images:
+        text = pytesseract.image_to_string(image)
+        pdf_text.append(Document(page_content=text))
     return pdf_text
 
 def pdf_chunk(pdf_text: List[Document]) -> List[Document]:

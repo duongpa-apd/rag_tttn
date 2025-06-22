@@ -1,1 +1,5 @@
 .env
+.venv
+Mathematics_for_Economics.pdf
+RAG_indexing.py
+db
