@@ -191,17 +191,3 @@ if st.button("RAG"):
         answer_rag = rag_chain.invoke({'pdf_path': pdf_path, 'query': query_input, 'db_path': persistent_directory})
         st.write("Answer RAG:")
         st.write(answer_rag)
-
-#     try:
-#         response = rag_chain.invoke(user_input)
-#         st.write(response)
-#     except Exception as e:
-#         st.write(f"An error occurred: {e}")
-
-
-# if query_input:
-#     with st.spinner("Generating answer..."):
-#         answer_llm = llm_chain.invoke({'query': query_input})
-#         answer_rag = rag_chain.invoke({'pdf_path': pdf_path, 'query': query_input, 'db_path': persistent_directory})
-#         st.write("Answer RAG:")
-        # st.write(answer_rag, )
